@@ -1,23 +1,11 @@
 // SPDX-License-Identifier: MIT
-
-// Amended by HashLips
-/**
-    !Disclaimer!
-    These contracts have been used to create tutorials,
-    and was created for the purpose to teach people
-    how to create smart contracts on the blockchain.
-    please review this code on your own before using any of
-    the following code for production.
-    HashLips will not be liable in any way if for the use 
-    of the code. That being said, the code has been tested 
-    to the best of the developers' knowledge to work as intended.
-*/
-
 pragma solidity >=0.8.0 <0.9.0;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeCast.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/utils/math/Math.sol";
 import "./Base64.sol";
 
 contract KEK is ERC721Enumerable, Ownable {
@@ -36,7 +24,7 @@ contract KEK is ERC721Enumerable, Ownable {
     constructor() ERC721("KEK", "KEK") {}
 
     // public
-    function mint(string memory value) public payable {
+    function mint(string memory word) public payable {
         uint256 supply = totalSupply();
         //require(supply + 1 <= 1000);
 
@@ -44,8 +32,8 @@ contract KEK is ERC721Enumerable, Ownable {
             string(abi.encodePacked("KEK #", uint256(supply + 1).toString())),
             "KEK",
             randomNum(361, block.difficulty, supply).toString(), //get chain id
-            randomNum(361, block.timestamp, supply).toString(),     //get chain id
-            value
+            randomNum(361, block.timestamp, supply).toString(), //get chain id
+            word
         );
 
         if (msg.sender != owner()) {
@@ -79,7 +67,7 @@ contract KEK is ERC721Enumerable, Ownable {
                         '<rect height="500" width="500" fill="hsl(',
                         currentWord.bgHue,
                         ', 50%, 25%)"/>',
-                        '<text x="0" y="0" dominant-baseline="left" fill="hsl(',
+                        '<text x="50%" y="50" dominant-baseline="left" fill="hsl(',
                         currentWord.textHue,
                         ', 100%, 80%)" text-anchor="middle" font-size="30">',
                         currentWord.value,
@@ -90,7 +78,18 @@ contract KEK is ERC721Enumerable, Ownable {
             );
     }
 
-   /*  function buildTextForImage (string memory word_) public pure returns (uint) {
+     function buildImage_v2(string memory word_) public view returns (string memory) {
+        return
+            Base64.encode(
+                bytes(
+                    abi.encodePacked(
+                       word_
+                    )
+                )
+            );
+    }
+
+    /*  function buildTextForImage (string memory word_) public pure returns (uint) {
         bytes32 b3 = stringToBytes32(word_);
         //uint numRows = ((b3)) / 1 ether;
         return numRows;
@@ -124,6 +123,29 @@ contract KEK is ERC721Enumerable, Ownable {
             );
     }
 
+    function buildMetadata_v2(string memory svg)
+        public
+        view
+        returns (string memory)
+    {
+        //Word memory currentWord = words[_tokenId];
+        return
+            string(
+                abi.encodePacked(
+                    "data:application/json;base64,",
+                    Base64.encode(
+                        bytes(
+                            abi.encodePacked(
+                                'image": "',
+                                "data:image/svg+xml;base64,",
+                                buildImage_v2(svg)
+                            )
+                        )
+                    )
+                )
+            );
+    }
+
     function tokenURI(uint256 _tokenId)
         public
         view
@@ -143,7 +165,11 @@ contract KEK is ERC721Enumerable, Ownable {
         require(os);
     }
 
-    function stringToBytes32(string memory source) public pure returns (bytes32 result) {
+    function stringToBytes32(string memory source)
+        public
+        pure
+        returns (bytes32 result)
+    {
         bytes memory tempEmptyStringTest = bytes(source);
         if (tempEmptyStringTest.length == 0) {
             return 0x0;
@@ -154,27 +180,27 @@ contract KEK is ERC721Enumerable, Ownable {
         }
     }
 
-    function utfStringLength(string memory str) public pure returns (uint length) {
-        uint i = 0;
+    //get the amount of rows needed
+    function utfStringLength(string memory str)
+        public
+        pure
+        returns (uint256 length)
+    {
+        uint256 i = 0;
         bytes memory string_rep = bytes(str);
 
-        while (i < string_rep.length ) {
-            if (string_rep[i]>>7==0)
-                i+=1;
-            else if (string_rep[i]>>5==bytes1(uint8(0x6)))
-                i+=2;
-            else if (string_rep[i]>>4==bytes1(uint8(0xE)))
-                i+=3;
-            else if (string_rep[i]>>3==bytes1(uint8(0x1E)))
-                i+=4;
-            else
+        while (i < string_rep.length) {
+            if (string_rep[i] >> 7 == 0) i += 1;
+            else if (string_rep[i] >> 5 == bytes1(uint8(0x6))) i += 2;
+            else if (string_rep[i] >> 4 == bytes1(uint8(0xE))) i += 3;
+            else if (string_rep[i] >> 3 == bytes1(uint8(0x1E)))
+                i += 4;
                 //For safety
-                i+=1;
+            else i += 1;
 
             length++;
         }
 
-        return length;
+        return uint256(length) / 32;
     }
-
 }
