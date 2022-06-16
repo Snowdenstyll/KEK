@@ -1,13 +1,18 @@
 require("@nomiclabs/hardhat-waffle");
+require("@nomiclabs/hardhat-ethers");
+require("@nomiclabs/hardhat-etherscan");
+require("hardhat-deploy-ethers");
+require('dotenv').config();
+
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
 task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
-  const accounts = await hre.ethers.getSigners();
+    const accounts = await hre.ethers.getSigners();
 
-  for (const account of accounts) {
-    console.log(account.address);
-  }
+    for (const account of accounts) {
+        console.log(account.address);
+    }
 });
 
 // You need to export an object to set up your config
@@ -17,5 +22,38 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
  * @type import('hardhat/config').HardhatUserConfig
  */
 module.exports = {
-  solidity: "0.8.4",
+    solidity: "0.8.9",
+    defaultNetwork: "avalancheFujiTestnet",
+
+    settings: {
+        optimizer: {
+            enabled: true,
+            runs: 200
+        }
+    },
+    namedAccounts: {
+        deployer: {
+            default: process.env.DEV_WALLET_ADDRESS,    // wallet address 0, of the mnemonic in .env
+        }
+    },
+    networks: {
+        hardhat: {
+        },
+        avalancheFujiTestnet: {
+            url: 'https://api.avax-test.network/ext/bc/C/rpc',
+            accounts: [process.env.TEST_ACCOUNT_PRIVATE_KEY],
+        },
+    },
+    etherscan: {
+        apiKey: {
+            avalancheFujiTestnet: process.env.SNOWTRACE_API,
+        }
+    },
+    paths: {
+        deploy: 'deploy',
+        deployments: 'deployments',
+        imports: 'imports',
+        facets: 'contracts/facets/'
+    },
+
 };

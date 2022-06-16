@@ -65,4 +65,10 @@ describe.only("TIME KEK", function () {
         console.log(T1);
     });
 
+    it("Token uri 2  test 2", async function () {
+        const T1 = await kek.tokenURI(1);
+        //await uri1.wait();
+        console.log(T1);
+    });
+
 });
