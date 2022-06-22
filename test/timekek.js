@@ -29,40 +29,91 @@ describe.only("TIME KEK", function () {
         await mint2.wait();
 
         const totalSupply = await kek.getTotalSupply();
-        console.log(totalSupply);
+        console.log(parseInt(totalSupply));
 
         //let token_uri = await kek.tokenURI(1);
         //console.log(token_uri);
     });
 
-    it("URI 1 ", async function () {
-        const uri1 = await kek.baseUri();
+    /*  it("URI 1 ", async function () {
+            const uri1 = await kek.baseUri();
+            //await uri1.wait();
+            console.log(uri1);
+    
+            //let token_uri = await kek.tokenURI(1);
+            //console.log(token_uri);
+        });
+    
+        it("URI 2", async function () {
+            const uri1 = await kek.baseUri();
+            //await uri1.wait();
+            console.log(uri1);
+    
+            //let token_uri = await kek.tokenURI(1);
+            //console.log(token_uri);
+        });
+    
+        it("Token uri 1 ", async function () {
+            const T1 = await kek.tokenURI(1);
+            //await uri1.wait();
+            console.log(T1);
+        });
+    
+        it("Token uri 2 ", async function () {
+            const T1 = await kek.tokenURI(1);
+            //await uri1.wait();
+            console.log(T1);
+        });
+    
+        it("Token uri 2  test 2", async function () {
+            const T1 = await kek.tokenURI(1);
+            //await uri1.wait();
+            console.log(T1);
+        }); */
+
+    /*     it("Token uri 2  test 2", async function () {
+            const T1 = await kek.getSVGContent(1, 1);
+            //await uri1.wait();
+            console.log(T1);
+        });
+    
+        it("Get the hour", async function () {
+            const hour = await kek.getHour();
+            //await uri1.wait();
+            console.log(parseInt(hour));
+        });
+    
+        it("Get the minute", async function () {
+            const minute = await kek.getMinute();
+            //await uri1.wait();
+            console.log(parseInt(minute));
+        });
+    
+        it("Get the second", async function () {
+            const second = await kek.getSecond();
+            //await uri1.wait();
+            console.log(parseInt(second));
+        }); */
+
+    /* it("Get the first digit of hour", async function () {
+        const hour = await kek.getHour();
         //await uri1.wait();
-        console.log(uri1);
+        console.log(parseInt(hour));
+        digits = (parseInt(hour).toString());
+        console.log(digits[0], digits[1]);
 
-        //let token_uri = await kek.tokenURI(1);
-        //console.log(token_uri);
-    });
+        const firstDigit = await kek.getFirstDigit(parseInt(hour));
+        const secondDigit = await kek.getSecondDigit(parseInt(hour));
 
-    it("URI 2", async function () {
-        const uri1 = await kek.baseUri();
-        //await uri1.wait();
-        console.log(uri1);
+        console.log(parseInt(firstDigit));
+        console.log(parseInt(secondDigit));
+    }); */
 
-        //let token_uri = await kek.tokenURI(1);
-        //console.log(token_uri);
-    });
-
-    it("Token uri 1 ", async function () {
-        const T1 = await kek.tokenURI(1);
-        //await uri1.wait();
+    it("Build Digits ", async function () {
+        const T1 = await kek.buildDigits(1);
         console.log(T1);
-    });
-
-    it("Token uri 2 ", async function () {
-        const T1 = await kek.tokenURI(1);
-        //await uri1.wait();
-        console.log(T1);
+        const T2 = await kek.buildDigits(2);
+        console.log(T2);
     });
 
     it("Token uri 2  test 2", async function () {
