@@ -109,6 +109,12 @@ describe.only("TIME KEK", function () {
         console.log(parseInt(secondDigit));
     }); */
 
+    it("Get second Digit => 0 ", async function () {
+        const T1 = await kek.buildDigits(0);
+        //await uri1.wait();
+        console.log(T1);
+    });
+
     it("Build Digits ", async function () {
         const T1 = await kek.buildDigits(1);
         console.log(T1);

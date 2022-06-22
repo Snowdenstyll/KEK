@@ -246,13 +246,7 @@ contract TimeKek is ERC721, Ownable {
                                 buildDigits(getFirstDigit(getHour())),
                             '</g>',
                             '<g>',
-                                '<path d="M66,8L70,4L98,4L102,8L98,12L70,12L66,8z"></path>',
-                                '<path d="M64,10L68,14L68,42L64,46L60,42L60,14L64,10z"></path>',
-                                '<path d="M104,10L108,14L108,42L104,46L100,42L100,14L104,10z"></path>',
-                                '<path d="M66,48L70,44L98,44L102,48L98,52L70,52L66,48z"></path>',
-                                '<path d="M64,50L68,54L68,82L64,86L60,82L60,54L64,50z"></path>',
-                                '<path d="M104,50L108,54L108,82L104,86L100,82L100,54L104,50z"></path>',
-                                '<path d="M66,88L70,84L98,84L102,88L98,92L70,92L66,88z"></path>',
+                                buildDigits(getSecondDigit(getHour())),
                             '</g>',
                             '<g>',
                                 '<circle r="4" cx="117" cy="28"></circle>',
@@ -365,11 +359,19 @@ contract TimeKek is ERC721, Ownable {
     }
 
     function getFirstDigit (uint256 digit) public pure returns (uint256 firstDigit) {
-        firstDigit = digit % 10;
+        if (digit <= 0) {
+            firstDigit = 0;
+        } else {
+            firstDigit = digit % 10;
+        }
     }
     
     function getSecondDigit (uint256 digit) public pure returns (uint256 secondDigit) {
-        secondDigit = digit / 10 % 10;
+        if (digit <= 0) {
+            secondDigit = 0;
+        } else {
+            secondDigit = digit / 10 % 10;
+        }
     }
 
     /**
@@ -400,9 +402,12 @@ contract TimeKek is ERC721, Ownable {
        hour_ = string(abi.encodePacked(temp));
     } */
 
-    function buildDigits(uint256 digit) public view returns (string memory hour_) {
-        uint256[] memory digitsArr = getDigitsBuild(digit);
+    function buildDigits(uint256 digit) public view returns (string memory content) {
+        uint256[] memory digitsBuild_ = getDigitsBuild(digit);
+        
+        for (uint256 index = 0; index < digitsBuild_.length; index++) {
+            content = string(abi.encodePacked(content, getSVGContent(digit, digitsBuild_[index])));
+        }
 
-        hour_ = string(abi.encodePacked(digitsArr));
     }
 }
