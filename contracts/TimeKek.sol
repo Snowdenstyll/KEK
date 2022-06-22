@@ -235,22 +235,36 @@ contract TimeKek is ERC721, Ownable {
     } */
 
     function _baseURI() internal view virtual override returns (string memory uri) {
-        uint256 ts = block.timestamp;
-        string memory bst = Strings.toString(ts);
         uri = Base64.encode(
             bytes(
                 abi.encodePacked(
                     '<svg width="375" height="96" xmlns="http://www.w3.org/2000/svg">',
                         '<g transform="translate(17,0)">',
                             '<g>',
-                                buildDigits(getFirstDigit(getHour())),
+                                buildDigits(1, getSecondDigit(getHour())),
                             '</g>',
                             '<g>',
-                                buildDigits(getSecondDigit(getHour())),
+                                buildDigits(2, getFirstDigit(getHour())),
                             '</g>',
                             '<g>',
                                 '<circle r="4" cx="117" cy="28"></circle>',
                                 '<circle r="4" cx="117" cy="68"></circle>',
+                            '</g>',
+                            '<g>',
+                                buildDigits(3, getSecondDigit(getMinute())),
+                            '</g>',
+                            '<g>',
+                                buildDigits(4, getFirstDigit(getMinute())),
+                            '</g>',
+                            '<g>',
+                                '<circle r="4" cx="241" cy="28"></circle>',
+                                '<circle r="4" cx="241" cy="68"></circle>',
+                            '</g>',
+                            '<g>',
+                                buildDigits(5, getSecondDigit(getSecond())),
+                            '</g>',
+                            '<g>',
+                                buildDigits(6, getFirstDigit(getSecond())),
                             '</g>',
                         '</g>',
                     "</svg>"
@@ -289,7 +303,6 @@ contract TimeKek is ERC721, Ownable {
         svgContent[2][6] = '<path d="M104,50L108,54L108,82L104,86L100,82L100,54L104,50z"></path>';
         svgContent[2][7] = '<path d="M66,88L70,84L98,84L102,88L98,92L70,92L66,88z"></path>';
         
-        /*
         svgContent[3][1] = '<path d="M134,8L138,4L166,4L170,8L166,12L138,12L134,8z"></path>';
         svgContent[3][2] = '<path d="M132,10L136,14L136,42L132,46L128,42L128,14L132,10z"></path>';
         svgContent[3][3] = '<path d="M172,10L176,14L176,42L172,46L168,42L168,14L172,10z"></path>';
@@ -305,7 +318,7 @@ contract TimeKek is ERC721, Ownable {
         svgContent[4][5] = '<path d="M188,50L192,54L192,82L188,86L184,82L184,54L188,50z"></path>';
         svgContent[4][6] = '<path d="M228,50L232,54L232,82L228,86L224,82L224,54L228,50z"></path>';
         svgContent[4][7] = '<path d="M190,88L194,84L222,84L226,88L222,92L194,92L190,88z"></path>';
-
+        /*
         svgContent[5][1] = '<path d="M258,8L262,4L290,4L294,8L290,12L262,12L258,8z"></path>';
         svgContent[5][2] = '<path d="M256,10L260,14L260,42L256,46L252,42L252,14L256,10z"></path>';
         svgContent[5][3] = '<path d="M296,10L300,14L300,42L296,46L292,42L292,14L296,10z"></path>';
@@ -320,7 +333,26 @@ contract TimeKek is ERC721, Ownable {
         svgContent[6][4] = '<path d="M314,48L318,44L346,44L350,48L346,52L318,52L314,48z"></path>';
         svgContent[6][5] = '<path d="M312,50L316,54L316,82L312,86L308,82L308,54L312,50z"></path>';
         svgContent[6][6] = '<path d="M352,50L356,54L356,82L352,86L348,82L348,54L352,50z"></path>';
-        svgContent[6][7] = '<path d="M314,88L318,84L346,84L350,88L346,92L318,92L314,88z"></path>'; */
+        svgContent[6][7] = '<path d="M314,88L318,84L346,84L350,88L346,92L318,92L314,88z"></path>';
+        */
+    }
+
+    function addSeconds () public {
+        svgContent[5][1] = '<path d="M258,8L262,4L290,4L294,8L290,12L262,12L258,8z"></path>';
+        svgContent[5][2] = '<path d="M256,10L260,14L260,42L256,46L252,42L252,14L256,10z"></path>';
+        svgContent[5][3] = '<path d="M296,10L300,14L300,42L296,46L292,42L292,14L296,10z"></path>';
+        svgContent[5][4] = '<path d="M258,48L262,44L290,44L294,48L290,52L262,52L258,48z"></path>';
+        svgContent[5][5] = '<path d="M256,50L260,54L260,82L256,86L252,82L252,54L256,50z"></path>';
+        svgContent[5][6] = '<path d="M296,50L300,54L300,82L296,86L292,82L292,54L296,50z"></path>';
+        svgContent[5][7] = '<path d="M258,88L262,84L290,84L294,88L290,92L262,92L258,88z"></path>';
+
+        svgContent[6][1] = '<path d="M314,8L318,4L346,4L350,8L346,12L318,12L314,8z"></path>';
+        svgContent[6][2] = '<path d="M312,10L316,14L316,42L312,46L308,42L308,14L312,10z"></path>';
+        svgContent[6][3] = '<path d="M352,10L356,14L356,42L352,46L348,42L348,14L352,10z"></path>';
+        svgContent[6][4] = '<path d="M314,48L318,44L346,44L350,48L346,52L318,52L314,48z"></path>';
+        svgContent[6][5] = '<path d="M312,50L316,54L316,82L312,86L308,82L308,54L312,50z"></path>';
+        svgContent[6][6] = '<path d="M352,50L356,54L356,82L352,86L348,82L348,54L352,50z"></path>';
+        svgContent[6][7] = '<path d="M314,88L318,84L346,84L350,88L346,92L318,92L314,88z"></path>';
     }
 
     function getTotalSupply() public view returns (uint256 ts) {
@@ -402,11 +434,11 @@ contract TimeKek is ERC721, Ownable {
        hour_ = string(abi.encodePacked(temp));
     } */
 
-    function buildDigits(uint256 digit) public view returns (string memory content) {
+    function buildDigits(uint256 num, uint256 digit) public view returns (string memory content) {
         uint256[] memory digitsBuild_ = getDigitsBuild(digit);
         
         for (uint256 index = 0; index < digitsBuild_.length; index++) {
-            content = string(abi.encodePacked(content, getSVGContent(digit, digitsBuild_[index])));
+            content = string(abi.encodePacked(content, getSVGContent(num, digitsBuild_[index])));
         }
 
     }

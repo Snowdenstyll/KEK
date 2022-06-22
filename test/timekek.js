@@ -109,23 +109,25 @@ describe.only("TIME KEK", function () {
         console.log(parseInt(secondDigit));
     }); */
 
-    it("Get second Digit => 0 ", async function () {
-        const T1 = await kek.buildDigits(0);
+    it("Add Minutes", async function () {
+        addSeconds = await kek.addSeconds();
+        await addSeconds.wait();
+    });
+
+    it("Get the second", async function () {
+        const seconds = await kek.getSVGContent(5, 5);
         //await uri1.wait();
-        console.log(T1);
+        console.log((seconds));
     });
 
-    it("Build Digits ", async function () {
-        const T1 = await kek.buildDigits(1);
-        console.log(T1);
-        const T2 = await kek.buildDigits(2);
-        console.log(T2);
-    });
+    it("Token uri 1  test 1", async function () {
+        addSeconds = await kek.addSeconds();
+        await addSeconds.wait();
 
-    it("Token uri 2  test 2", async function () {
         const T1 = await kek.tokenURI(1);
         //await uri1.wait();
         console.log(T1);
     });
+
 
 });
