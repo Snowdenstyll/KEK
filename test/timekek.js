@@ -1,5 +1,4 @@
 const { expect } = require("chai");
-const { ethers } = require("hardhat");
 
 describe.only("TIME KEK", function () {
     let KEK;
@@ -24,42 +23,49 @@ describe.only("TIME KEK", function () {
         await mint_tx.wait();
         const mint2 = await kek.mint();
         await mint2.wait();
+        const seconds = await kek.addSeconds();
+        await seconds.wait();
     });
 
-
-    /* it("Should Mint new kek", async function () {
-        const mint_tx = await kek.mint();
-        await mint_tx.wait();
-        const mint2 = await kek.mint();
-        await mint2.wait();
-    }); */
-
-    it("Total Supply, async function", async function () {
-        const totalSupply = await kek.getTotalSupply();
-        console.log(parseInt(totalSupply));
+    it("Add the second", async function () {
+        const seconds = await kek.addSeconds();
+        await seconds.wait();
     });
 
-    it("get Color way", async function () {
+    /* it("get Color way", async function () {
         colorWayOne = await kek.getColorSet(1);
         console.log((colorWayOne));
 
         colorWayTwo = await kek.getColorSet(2);
         console.log((colorWayTwo));
-    });
+    }); */
 
-    it("Token uri 2 ", async function () {
+    it("Token uri 1 ", async function () {
         const T1 = await kek.tokenURI(1);
         //await uri1.wait();
         console.log(T1);
     });
 
     it("Token uri 2  test 2", async function () {
-        const T1 = await kek.tokenURI(1);
+        const T2 = await kek.tokenURI(2);
         //await uri1.wait();
-        console.log(T1);
+        console.log(T2);
     });
 
-    it("Get ColorwayString", async function () {
+    it("Total Supply, async function", async function () {
+        const totalSupply = await kek.TotalSupply();
+        console.log(parseInt(totalSupply));
+    });
+
+    it("Get SVG CONTENT FOR SECONDS", async function () {
+        const seconds = await kek.addSeconds();
+        await seconds.wait();
+        let seconds_svg = await kek.getSVGContent(6, 7);
+        //await uri1.wait();
+        console.log(seconds_svg);
+    });
+
+    /* it("Get ColorwayString", async function () {
         const T1 = await kek.GetColorWayString(1);
         //await uri1.wait();
         console.log(T1);
@@ -69,7 +75,7 @@ describe.only("TIME KEK", function () {
         const T1 = await kek.getColorSetIndex(1);
         //await uri1.wait();
         console.log(parseInt(T1));
-    });
+    }); */
 
     /*  it("URI 1 ", async function () {
             const uri1 = await kek.baseUri();
@@ -115,11 +121,7 @@ describe.only("TIME KEK", function () {
             console.log(parseInt(minute));
         });
     
-        it("Get the second", async function () {
-            const second = await kek.getSecond();
-            //await uri1.wait();
-            console.log(parseInt(second));
-        }); */
+
 
     /* it("Get the first digit of hour", async function () {
         const hour = await kek.getHour();

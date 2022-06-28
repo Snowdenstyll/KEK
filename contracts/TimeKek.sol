@@ -96,7 +96,7 @@ contract TimeKek is ERC721, Ownable {
         _safeMint(to, tokenId);
     }
 
-    function mint() public onlyOwner {
+    function mint() public {
         totalSupply = totalSupply + 1;
         _safeMint(msg.sender, totalSupply);
         getNumbersFromAddress(msg.sender, totalSupply);
@@ -233,7 +233,7 @@ contract TimeKek is ERC721, Ownable {
             );
     }
 
-    function getSVGContent (uint256 index, uint256 num) private view returns (string memory) {
+    function getSVGContent (uint256 index, uint256 num) public view returns (string memory) {
         return svgContent[index][num];
     }
 
