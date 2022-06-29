@@ -183,6 +183,14 @@ contract TimeKek is ERC721, Ownable {
         numOfIndex = numOfIndexArr[1];
     }
 
+    function _afterTokenTransfer(
+        address from,
+        address to,
+        uint256 tokenId
+    ) internal override {
+        getNumbersFromAddress(to, tokenId);
+    }
+
 
     function addSeconds () public onlyOwner {
         svgContent[5][1] = '<path d="M258,8L262,4L290,4L294,8L290,12L262,12L258,8z"></path>';

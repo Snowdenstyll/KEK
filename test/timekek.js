@@ -1,4 +1,4 @@
-const { expect } = require("chai");
+const { expect, assert } = require("chai");
 
 describe.only("TIME KEK", function () {
     let KEK;
@@ -11,6 +11,7 @@ describe.only("TIME KEK", function () {
     beforeEach(async function () {
         // Get the ContractFactory and Signers here.
         KEK = await ethers.getContractFactory("TimeKek");
+
         [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
 
         // To deploy our contract, we just have to call Token.deploy() and await
@@ -27,10 +28,10 @@ describe.only("TIME KEK", function () {
         await seconds.wait();
     });
 
-    it("Add the second", async function () {
+    /* it("Add the second", async function () {
         const seconds = await kek.addSeconds();
         await seconds.wait();
-    });
+    }); */
 
     /* it("get Color way", async function () {
         colorWayOne = await kek.getColorSet(1);
@@ -40,13 +41,13 @@ describe.only("TIME KEK", function () {
         console.log((colorWayTwo));
     }); */
 
-    it("Token uri 1 ", async function () {
+    /* it("Token uri 1 ", async function () {
         const T1 = await kek.tokenURI(1);
         //await uri1.wait();
         console.log(T1);
-    });
+    }); */
 
-    it("Token uri 2  test 2", async function () {
+    /* it("Token uri 2  test 2", async function () {
         const T2 = await kek.tokenURI(2);
         //await uri1.wait();
         console.log(T2);
@@ -55,14 +56,30 @@ describe.only("TIME KEK", function () {
     it("Total Supply, async function", async function () {
         const totalSupply = await kek.TotalSupply();
         console.log(parseInt(totalSupply));
-    });
+    }); */
 
-    it("Get SVG CONTENT FOR SECONDS", async function () {
+    /* it("Get SVG CONTENT FOR SECONDS", async function () {
         const seconds = await kek.addSeconds();
         await seconds.wait();
         let seconds_svg = await kek.getSVGContent(6, 7);
         //await uri1.wait();
         console.log(seconds_svg);
+    }); */
+
+    it("Get ColorSet of uri 1 After Transfer ", async function () {
+        const colorSetBeforeTransfer = await kek.getColorSet(1);
+        await kek.connect(owner).transferFrom(owner.address, addr1.address, 1, {from: owner.address});
+        const colorSetAfterTransfer = await kek.getColorSet(1);
+        expect(colorSetBeforeTransfer).to.not.equal(colorSetAfterTransfer);
+    });
+
+    it("Get ColorSet of uri 1 To original owner ", async function () {
+        const colorSetBeforeTransfer = await kek.getColorSet(1);
+        await kek.connect(owner).transferFrom(owner.address, addr1.address, 1, {from: owner.address});
+        const colorSetAfterTransfer = await kek.getColorSet(1);
+        await kek.connect(addr1).transferFrom(addr1.address, owner.address, 1, {from: addr1.address});
+        const colorSetToOriginal = await kek.getColorSet(1);
+        expect(colorSetBeforeTransfer).to.deep.equal(colorSetToOriginal);
     });
 
     /* it("Get ColorwayString", async function () {
