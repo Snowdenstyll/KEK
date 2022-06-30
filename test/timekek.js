@@ -41,11 +41,11 @@ describe.only("TIME KEK", function () {
         console.log((colorWayTwo));
     }); */
 
-    /* it("Token uri 1 ", async function () {
+    it("Token uri 1 ", async function () {
         const T1 = await kek.tokenURI(1);
         //await uri1.wait();
         console.log(T1);
-    }); */
+    });
 
     /* it("Token uri 2  test 2", async function () {
         const T2 = await kek.tokenURI(2);

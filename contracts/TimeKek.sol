@@ -6,13 +6,13 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "./Base64.sol";
+import {KekSVGLib} from "./KekSVGLib.sol";
 
 contract TimeKek is ERC721, Ownable {
     using Strings for string;
     using Strings for uint256;
 
     uint256 totalSupply;
-
     mapping(uint256 => mapping(uint256 => string)) svgContent;
     mapping(uint256 => uint256[]) digitsBuild;
     mapping(uint256 => uint256[]) idToColorSet;
@@ -66,62 +66,25 @@ contract TimeKek is ERC721, Ownable {
         svgContent[4][5] = '<path d="M188,50L192,54L192,82L188,86L184,82L184,54L188,50z"></path>';
         svgContent[4][6] = '<path d="M228,50L232,54L232,82L228,86L224,82L224,54L228,50z"></path>';
         svgContent[4][7] = '<path d="M190,88L194,84L222,84L226,88L222,92L194,92L190,88z"></path>';
-        /*
-        svgContent[5][1] = '<path d="M258,8L262,4L290,4L294,8L290,12L262,12L258,8z"></path>';
-        svgContent[5][2] = '<path d="M256,10L260,14L260,42L256,46L252,42L252,14L256,10z"></path>';
-        svgContent[5][3] = '<path d="M296,10L300,14L300,42L296,46L292,42L292,14L296,10z"></path>';
-        svgContent[5][4] = '<path d="M258,48L262,44L290,44L294,48L290,52L262,52L258,48z"></path>';
-        svgContent[5][5] = '<path d="M256,50L260,54L260,82L256,86L252,82L252,54L256,50z"></path>';
-        svgContent[5][6] = '<path d="M296,50L300,54L300,82L296,86L292,82L292,54L296,50z"></path>';
-        svgContent[5][7] = '<path d="M258,88L262,84L290,84L294,88L290,92L262,92L258,88z"></path>';
-
-        svgContent[6][1] = '<path d="M314,8L318,4L346,4L350,8L346,12L318,12L314,8z"></path>';
-        svgContent[6][2] = '<path d="M312,10L316,14L316,42L312,46L308,42L308,14L312,10z"></path>';
-        svgContent[6][3] = '<path d="M352,10L356,14L356,42L352,46L348,42L348,14L352,10z"></path>';
-        svgContent[6][4] = '<path d="M314,48L318,44L346,44L350,48L346,52L318,52L314,48z"></path>';
-        svgContent[6][5] = '<path d="M312,50L316,54L316,82L312,86L308,82L308,54L312,50z"></path>';
-        svgContent[6][6] = '<path d="M352,50L356,54L356,82L352,86L348,82L348,54L352,50z"></path>';
-        svgContent[6][7] = '<path d="M314,88L318,84L346,84L350,88L346,92L318,92L314,88z"></path>';
-        */
-    }
-
-    function _burn(uint256 tokenId) internal override(ERC721) {
-        super._burn(tokenId);
-    }
-
-    function safeMint(address to, uint256 tokenId)
-        public
-        onlyOwner
-    {
-        _safeMint(to, tokenId);
     }
 
     function mint() public {
         totalSupply = totalSupply + 1;
-        _safeMint(msg.sender, totalSupply);
         getNumbersFromAddress(msg.sender, totalSupply);
+        _safeMint(msg.sender, totalSupply);
     }
-
-    function baseUri() public view returns (string memory) {
-        string memory uri = _baseURI();
-        return uri;
-    }
-
-    // The following functions are overrides required by Solidity.
 
     function tokenURI(uint256 tokenId)
         public
         view
         virtual
-        override(ERC721)
-        returns (string memory currentBaseURI)
+        override
+        returns (string memory)
     {
-        //currentBaseURI = baseUri();
        return buildMetadata(tokenId);
     }
 
-    function _baseURI(uint256 tokenId) internal view virtual  returns (string memory uri) {
-        uint256[] memory colorSet = getColorSet(tokenId);
+    function URI(uint256 tokenId) internal view virtual returns (string memory uri) {
         uri = Base64.encode(
             bytes(
                 abi.encodePacked(
@@ -129,39 +92,39 @@ contract TimeKek is ERC721, Ownable {
                     '<rect x="10" y="10" rx="20" ry="22" width="400" height="150"',
                        GetColorWayString(tokenId),
                             '<g>',
-                                buildDigits(1, getSecondDigit(getHour())),
+                                buildDigits(1, KekSVGLib.getSecondDigit(KekSVGLib.getHour())),
                             '</g>',
                             '<g>',
-                                buildDigits(2, getFirstDigit(getHour())),
+                                buildDigits(2, KekSVGLib.getFirstDigit(KekSVGLib.getHour())),
                             '</g>',
                             '<g>',
                                 '<circle r="4" cx="117" cy="28"></circle>',
                                 '<circle r="4" cx="117" cy="68"></circle>',
                             '</g>',
                             '<g>',
-                                buildDigits(3, getSecondDigit(getMinute())),
+                                buildDigits(3, KekSVGLib.getSecondDigit(KekSVGLib.getMinute())),
                             '</g>',
                             '<g>',
-                                buildDigits(4, getFirstDigit(getMinute())),
+                                buildDigits(4, KekSVGLib.getFirstDigit(KekSVGLib.getMinute())),
                             '</g>',
                             '<g>',
                                 '<circle r="4" cx="241" cy="28"></circle>',
                                 '<circle r="4" cx="241" cy="68"></circle>',
                             '</g>',
                             '<g>',
-                                buildDigits(5, getSecondDigit(getSecond())),
+                                buildDigits(5, KekSVGLib.getSecondDigit(KekSVGLib.getSecond())),
                             '</g>',
                             '<g>',
-                                buildDigits(6, getFirstDigit(getSecond())),
+                                buildDigits(6, KekSVGLib.getFirstDigit(KekSVGLib.getSecond())),
                             '</g>',
                         '</g>',
                     "</svg>"
                 )
             )
         );
-    }
+    } 
 
-    function GetColorWayString(uint256 tokenId) public view returns (string memory) {
+    function GetColorWayString(uint256 tokenId) internal view returns (string memory) {
         uint256[] memory colorSet = getColorSet(tokenId);
 
         return string(                
@@ -178,7 +141,7 @@ contract TimeKek is ERC721, Ownable {
             );
     }
 
-    function getColorSetIndex(uint256 tokenId) public view returns (uint256 numOfIndex) {
+    function getColorSetIndex(uint256 tokenId) internal view returns (uint256 numOfIndex) {
        uint256[] memory numOfIndexArr = getColorSet(tokenId);
         numOfIndex = numOfIndexArr[1];
     }
@@ -190,7 +153,6 @@ contract TimeKek is ERC721, Ownable {
     ) internal override {
         getNumbersFromAddress(to, tokenId);
     }
-
 
     function addSeconds () public onlyOwner {
         svgContent[5][1] = '<path d="M258,8L262,4L290,4L294,8L290,12L262,12L258,8z"></path>';
@@ -210,28 +172,15 @@ contract TimeKek is ERC721, Ownable {
         svgContent[6][7] = '<path d="M314,88L318,84L346,84L350,88L346,92L318,92L314,88z"></path>';
     }
 
-    function TotalSupply() public view returns (uint256 ts) {
-        ts = totalSupply;
-    }
-
     //TIMESTAMP
-    function buildMetadata(uint256 tokenId)
-    public
-    view
-    returns (string memory)
-    {
-        string memory temp = _baseURI(tokenId);
-        return
-            string(
-                abi.encodePacked(
-                    "data:application/json;base64,",
-                    Base64.encode(
-                        bytes(
-                            abi.encodePacked(
+    function buildMetadata(uint256 tokenId) public view returns (string memory) {
+        string memory temp = URI(tokenId);
+        return string(abi.encodePacked(
+                    'data:application/json;base64,', Base64.encode(bytes(abi.encodePacked(
                                 '{"name":"' 'kek',
                                 '", "description":"kek',
                                 '", "image": "',
-                                "data:image/svg+xml;base64,",
+                                'data:image/svg+xml;base64,',
                                 temp,
                                 '"}'
                             )
@@ -245,42 +194,14 @@ contract TimeKek is ERC721, Ownable {
         return svgContent[index][num];
     }
 
-    function getFirstDigit (uint256 digit) private pure returns (uint256 firstDigit) {
-        if (digit <= 0) {
-            firstDigit = 0;
-        } else {
-            firstDigit = digit % 10;
-        }
-    }
-    
-    function getSecondDigit (uint256 digit) private pure returns (uint256 secondDigit) {
-        if (digit <= 0) {
-            secondDigit = 0;
-        } else {
-            secondDigit = digit / 10 % 10;
-        }
-    }
-
     /**
     *   return an array of numbers 
     */
-    function getDigitsBuild (uint256 digit) private view returns (uint256[] memory digitsArr) {
+    function getDigitsBuild (uint256 digit) public view returns (uint256[] memory digitsArr) {
         digitsArr = digitsBuild[digit];
     }
 
-    function getHour() private view returns (uint256 hour) {
-        hour = (block.timestamp/ 60 / 60) % 24;
-    }
-
-    function getMinute() private view returns (uint256 minute) {
-        minute = ((block.timestamp / 60) % 60);
-    }
-
-    function getSecond() private view returns (uint256 second) {
-        second = (block.timestamp % 60);
-    }
-
-    function buildDigits(uint256 num, uint256 digit) private view returns (string memory content) {
+    function buildDigits(uint256 num, uint256 digit) public view returns (string memory content) {
         uint256[] memory digitsBuild_ = getDigitsBuild(digit);
         
         for (uint256 index = 0; index < digitsBuild_.length; index++) {
@@ -302,4 +223,9 @@ contract TimeKek is ERC721, Ownable {
     function getColorSet (uint256 tokenId) public view returns (uint256[] memory colorWay) {
         colorWay = idToColorSet[tokenId];
     } 
+
+    function withdraw() public payable onlyOwner {    
+        (bool os, ) = payable(owner()).call{value: address(this).balance}("");
+        require(os);
+    }
 }
